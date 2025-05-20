@@ -156,6 +156,131 @@
             white-space: normal; /* Allow event text to wrap */
         }
 
+
+        /* ------------------------------------------- */
+        /* RESPONSIVE DESIGN - MEDIA QUERIES           */
+        /* ------------------------------------------- */
+
+        /* Styles for screens smaller than 768px (common tablet breakpoint) */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px; /* Reduce overall padding on smaller screens */
+            }
+
+            h1 {
+                font-size: 1.8rem; /* Smaller heading */
+            }
+
+            h2 {
+                font-size: 1.4rem; /* Smaller sub-heading */
+            }
+
+            .container-card {
+                padding: 20px; /* Reduce card padding */
+                margin-top: 15px; /* Reduce margin between cards */
+                border-radius: 8px; /* Slightly less rounded */
+                box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Softer shadow */
+            }
+
+            .add-appointment-form input[type="text"],
+            .add-appointment-form input[type="date"],
+            .add-appointment-form select,
+            .add-appointment-form button {
+                padding: 10px; /* Smaller padding for form elements */
+                font-size: 0.95rem; /* Slightly smaller font size */
+            }
+
+            .add-appointment-form button {
+                padding: 12px 20px; /* Adjust button padding */
+                font-size: 1rem;
+            }
+
+            .form-row-inline {
+                flex-direction: column; /* Stack date and time vertically on smaller screens */
+                gap: 15px; /* Adjust gap when stacked */
+            }
+
+            /* FullCalendar specific adjustments for smaller screens */
+            #calendar {
+                font-size: 0.85rem; /* Smaller calendar font size */
+            }
+
+            /* Make header toolbar responsive */
+            .fc-toolbar-chunk {
+                display: flex;
+                flex-direction: column; /* Stack toolbar elements */
+                align-items: center;
+                gap: 5px; /* Space between stacked elements */
+            }
+            .fc-toolbar-chunk:nth-child(2) { /* Center title */
+                order: -1; /* Move title to top if needed */
+            }
+            .fc-toolbar-chunk:nth-child(1), /* Prev/Next/Today buttons */
+            .fc-toolbar-chunk:nth-child(3) { /* Month/Week/Day buttons */
+                width: 100%; /* Make button groups take full width */
+                justify-content: center; /* Center buttons within their group */
+                display: flex; /* Make buttons in group flex */
+                flex-wrap: wrap; /* Allow buttons to wrap */
+                gap: 5px; /* Space between individual buttons */
+            }
+            .fc-toolbar-chunk button {
+                font-size: 0.85rem !important; /* Smaller button text */
+                padding: 6px 10px !important;
+            }
+
+            /* Adjust day names (Mon, Tue, etc.) on very small screens */
+            .fc-col-header-cell-cushion {
+                font-size: 0.75rem;
+            }
+
+            /* Adjust event text on very small screens */
+            .fc-event-title {
+                font-size: 0.7rem; /* Smaller event title */
+            }
+            .fc-event-time {
+                font-size: 0.65rem; /* Smaller event time */
+            }
+        }
+
+        /* Styles for screens smaller than 480px (typical phone portrait) */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px; /* Even less padding */
+            }
+
+            h1 {
+                font-size: 1.6rem;
+                margin-bottom: 15px;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+
+            .container-card {
+                padding: 15px;
+                margin-top: 10px;
+            }
+
+            /* Make FullCalendar switch to a list view for very small screens */
+            #calendar {
+                font-size: 0.8rem;
+            }
+
+            /* Adjust the header toolbar for very small screens */
+            .fc-toolbar-chunk:nth-child(1),
+            .fc-toolbar-chunk:nth-child(3) {
+                flex-direction: column; /* Stack prev/next/today buttons vertically */
+            }
+            .fc-toolbar-chunk button {
+                width: 100%; /* Make buttons take full width */
+                max-width: 150px; /* Limit individual button width */
+            }
+            .fc-col-header-cell-cushion {
+                font-size: 0.7rem; /* Even smaller day names */
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -345,7 +470,7 @@
                     title: clientName + ' - ' + serviceType,
                     start: fullDateTime,
                     allDay: false,
-                    color: '#8c739a' // Use the new event color
+                    color: '#8c739a'
                 };
 
                 appointments.push(newAppointment);
