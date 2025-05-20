@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nail Salon Appointment Calendar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+    <style>
+        /* General Body and Font Styles */
+        body {
+            font-family: 'Open Sans', sans-serif; /* Primary content font */
+            margin: 0;
+            padding: 30px; /* Increased padding */
+            background: linear-gradient(to right, #f8e1eb, #e0f2f7); /* Soft gradient background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+            box-sizing: border-box; /* Ensures padding doesn't increase total width/height */
+        }
+
+        h1, h2 {
+            font-family: 'Montserrat', sans-serif; /* Heading font */
+            color: #5d4037; /* Darker, earthy tone for headings */
+            text-align: center;
+            margin-bottom: 25px; /* More space below headings */
+        }
+
+        /* Container Styles */
+        .container-card {
+            background-color: #ffffff;
+            padding: 30px; /* More padding inside cards */
+            border-radius: 12px; /* Softer rounded corners */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08); /* More pronounced, soft shadow */
+            max-width: 950px; /* Slightly wider overall container */
+            width: 100%;
+            margin-top: 25px; /* Space between cards */
+            box-sizing: border-box;
+        }
+
+        /* Specific styles for the form container */
+        .add-appointment-form {
+            max-width: 550px; /* Slightly wider form */
+            margin-bottom: 30px; /* More space below the form */
+        }
+
+        /* Form Elements Styling */
+        .form-row {
+            margin-bottom: 15px; /* Space between form rows */
+        }
+
+        .form-row label {
+            font-weight: 600; /* Bolder labels */
+            color: #5d4037; /* Match heading color for labels */
+            margin-bottom: 8px; /* Space between label and input */
+            display: block; /* Make label take full width */
+        }
+
+        .add-appointment-form input[type="text"],
+        .add-appointment-form input[type="date"],
+        .add-appointment-form select {
+            width: 100%; /* Full width */
+            padding: 12px; /* More padding for inputs */
+            border: 1px solid #c9c9c9; /* Softer border */
+            border-radius: 6px; /* Slightly rounded input corners */
+            font-size: 1rem; /* Readable font size */
+            color: #444;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition on focus */
+            box-sizing: border-box;
+        }
+
+        .add-appointment-form input[type="text"]:focus,
+        .add-appointment-form input[type="date"]:focus,
+        .add-appointment-form select:focus {
+            outline: none; /* Remove default outline */
+            border-color: #b08c9f; /* Highlight border on focus */
+            box-shadow: 0 0 0 3px rgba(176, 140, 159, 0.2); /* Soft focus shadow */
+        }
+
+        .form-row-inline {
+            display: flex;
+            gap: 20px; /* More space between date and time */
+        }
+        .form-row-inline > div {
+            flex: 1;
+        }
+
+        .add-appointment-form button {
+            background-color: #b08c9f; /* A soft, inviting pink/purple */
+            color: white;
+            padding: 14px 25px; /* Larger button */
+            border: none;
+            border-radius: 8px; /* More rounded button */
+            cursor: pointer;
+            font-size: 1.1rem; /* Slightly larger text */
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effects */
+            width: 100%; /* Full width button */
+        }
+
+        .add-appointment-form button:hover {
+            background-color: #9a7d8c; /* Slightly darker on hover */
+            transform: translateY(-2px); /* Subtle lift effect */
+        }
+
+        /* FullCalendar Specific Adjustments */
+        #calendar {
+            font-size: 0.95rem; /* Slightly adjust calendar font size */
+        }
+
+        /* FullCalendar event styling */
+        .fc-event {
+            background-color: #8c739a; /* A complementary darker purple for events */
+            border-color: #8c739a;
+            color: white !important; /* Ensure text is white for contrast */
+            border-radius: 4px; /* Rounded event corners */
+            padding: 2px 5px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer; /* Indicate clickability */
+        }
+
+        /* FullCalendar header buttons */
+        .fc-toolbar-chunk button {
+            background-color: #c0a0b8 !important; /* Lighter shade for calendar buttons */
+            color: white !important;
+            border-color: #c0a0b8 !important;
+            border-radius: 5px !important;
+            padding: 8px 12px !important;
+            font-size: 0.9rem !important;
+            transition: background-color 0.3s ease;
+        }
+
+        .fc-toolbar-chunk button:hover {
+            background-color: #a3899f !important;
+            border-color: #a3899f !important;
+        }
+
+        /* FullCalendar day headers (Mon, Tue, etc.) */
+        .fc-col-header-cell-cushion {
+            font-weight: 700;
+            color: #5d4037;
+            text-transform: uppercase;
+        }
+
+        /* FullCalendar day numbers */
+        .fc-daygrid-day-number {
+            font-weight: 600;
+            color: #666;
+        }
+
+        /* Ensure calendar events are visible against light background */
+        .fc-daygrid-event {
+            white-space: normal; /* Allow event text to wrap */
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Nail Salon Appointments</h1>
+
+    <div class="container-card add-appointment-form">
+        <h2>Add New Appointment</h2>
+        <div class="form-row">
+            <label for="clientName">Client Name:</label>
+            <input type="text" id="clientName" placeholder="e.g., Jane Doe" required>
+        </div>
+        <div class="form-row">
+            <label for="serviceType">Service:</label>
+            <input type="text" id="serviceType" placeholder="e.g., Manicure & Pedicure" required>
+        </div>
+        <div class="form-row-inline">
+            <div class="form-row">
+                <label for="appointmentDate">Date:</label>
+                <input type="date" id="appointmentDate" required>
+            </div>
+            <div class="form-row">
+                <label for="appointmentTime">Time:</label>
+                <select id="appointmentTime" required>
+                    </select>
+            </div>
+        </div>
+        <button id="addAppointmentBtn">Add Appointment</button>
+    </div>
+
+    <div class="container-card" id="calendar-container">
+        <div id="calendar"></div>
+    </div>
+
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var addAppointmentBtn = document.getElementById('addAppointmentBtn');
+            var clientNameInput = document.getElementById('clientName');
+            var serviceTypeInput = document.getElementById('serviceType');
+            var appointmentDateInput = document.getElementById('appointmentDate');
+            var appointmentTimeSelect = document.getElementById('appointmentTime');
+
+            // Function to load appointments from local storage
+            function loadAppointments() {
+                const appointmentsJSON = localStorage.getItem('nailSalonAppointments');
+                return appointmentsJSON ? JSON.parse(appointmentsJSON) : [];
+            }
+
+            // Function to save appointments to local storage
+            function saveAppointments(appointments) {
+                localStorage.setItem('nailSalonAppointments', JSON.stringify(appointments));
+            }
+
+            // Function to populate time dropdown (e.g., every 30 minutes from 9 AM to 6 PM)
+            function populateTimeDropdown() {
+                appointmentTimeSelect.innerHTML = ''; // Clear existing options
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = 'Select Time';
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                appointmentTimeSelect.appendChild(defaultOption);
+
+                const startTime = 9 * 60; // 9 AM in minutes
+                const endTime = 18 * 60;   // 6 PM in minutes
+                const interval = 30;      // 30 minute interval
+
+                for (let i = startTime; i <= endTime; i += interval) {
+                    const hours = Math.floor(i / 60);
+                    const minutes = i % 60;
+
+                    const ampm = hours >= 12 ? 'PM' : 'AM';
+                    const displayHours = hours % 12 || 12;
+                    const displayMinutes = minutes < 10 ? '0' + minutes : minutes;
+                    const timeString = `${displayHours}:${displayMinutes} ${ampm}`;
+
+                    const valueHours = hours < 10 ? '0' + hours : hours;
+                    const valueMinutes = minutes < 10 ? '0' + minutes : minutes;
+                    const valueString = `${valueHours}:${valueMinutes}`;
+
+                    const option = document.createElement('option');
+                    option.value = valueString;
+                    option.textContent = timeString;
+                    appointmentTimeSelect.appendChild(option);
+                }
+            }
+
+            // Initialize appointments array with saved data
+            let appointments = loadAppointments();
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: appointments, // Display existing appointments
+                eventClick: function(info) {
+                    const eventTitle = info.event.title;
+                    const appointmentIdToDelete = info.event.id;
+
+                    if (confirm(`Are you sure you want to delete the appointment for:\n${eventTitle}?`)) {
+                        info.event.remove();
+                        appointments = appointments.filter(appt => appt.id !== appointmentIdToDelete);
+                        saveAppointments(appointments);
+                        alert('Appointment deleted successfully!');
+                    }
+                },
+                editable: true,
+                eventDrop: function(info) {
+                    const eventId = info.event.id;
+                    const newStart = info.event.startStr;
+
+                    const droppedDate = newStart.split('T')[0];
+                    const droppedTime = newStart.split('T')[1].substring(0, 5);
+
+                    const isConflict = appointments.some(appt => {
+                        if (appt.id === eventId) {
+                            return false;
+                        }
+                        const existingDateTime = appt.start;
+                        const existingDate = existingDateTime.split('T')[0];
+                        const existingTime = existingDateTime.split('T')[1].substring(0, 5);
+                        return existingDate === droppedDate && existingTime === droppedTime;
+                    });
+
+                    if (isConflict) {
+                        alert('Double booking is not allowed! This time slot is already taken.');
+                        info.revert();
+                        return;
+                    }
+
+                    let updated = false;
+                    appointments = appointments.map(appt => {
+                        if (appt.id === eventId) {
+                            appt.start = newStart;
+                            updated = true;
+                        }
+                        return appt;
+                    });
+
+                    if (updated) {
+                        saveAppointments(appointments);
+                        console.log('Appointment updated:', info.event.title, 'to', newStart);
+                    } else {
+                        info.revert();
+                    }
+                }
+            });
+            calendar.render();
+
+            populateTimeDropdown();
+
+            // Set today's date as default for the date input
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            appointmentDateInput.value = `${year}-${month}-${day}`;
+
+
+            // Handle adding new appointments
+            addAppointmentBtn.addEventListener('click', function() {
+                const clientName = clientNameInput.value.trim();
+                const serviceType = serviceTypeInput.value.trim();
+                const appointmentDate = appointmentDateInput.value;
+                const appointmentTime = appointmentTimeSelect.value;
+
+                if (!clientName || !serviceType || !appointmentDate || !appointmentTime) {
+                    alert('Please fill in all appointment details.');
+                    return;
+                }
+
+                const fullDateTime = `${appointmentDate}T${appointmentTime}`;
+
+                const isDoubleBooked = appointments.some(appt => appt.start === fullDateTime);
+
+                if (isDoubleBooked) {
+                    alert('This time slot is already booked. Please choose a different time.');
+                    return;
+                }
+
+                const newAppointment = {
+                    id: Date.now().toString(),
+                    title: clientName + ' - ' + serviceType,
+                    start: fullDateTime,
+                    allDay: false,
+                    color: '#8c739a' // Use the new event color
+                };
+
+                appointments.push(newAppointment);
+                saveAppointments(appointments);
+
+                calendar.addEvent(newAppointment);
+
+                clientNameInput.value = '';
+                serviceTypeInput.value = '';
+                appointmentTimeSelect.value = '';
+
+                alert('Appointment added successfully!');
+            });
+
+            // Optional: When the calendar date is clicked, pre-fill the date input
+            calendar.on('dateClick', function(info) {
+                appointmentDateInput.value = info.dateStr;
+                appointmentTimeSelect.value = '';
+                clientNameInput.focus();
+            });
+        });
+    </script>
+</body>
+</html>
